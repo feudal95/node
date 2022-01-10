@@ -6,11 +6,12 @@ exports.createCommunities = async (req, res) => {
 
         console.log("THIS IS THE BODY", body)
         const data = {
+            id: body.id,
             name: body.name,
             type: body.type,
             userLimit: body.userLimit
         };
-        communities.push(data);
+        communities.push(...communities,data);
 
         return res.status(201).send({
             message: 'Comunidad creada correctamente'
@@ -33,4 +34,20 @@ exports.getCommunities = async (req, res) => {
         return res.status(500);
     }
 
+};
+
+exports.updateComunnities = async (req, res) => {
+    try{
+
+        const {body, params} = req;
+        const update = communities.find(id);
+
+        const data =  {
+            name:body
+        }
+        
+
+    }catch(error){
+
+    }
 };

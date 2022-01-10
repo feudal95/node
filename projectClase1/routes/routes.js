@@ -9,7 +9,11 @@ enrutador
     .get(communities.getCommunities)
     .post(communities.createCommunities);
 
-enrutador.route('/createCommunities').post(communities.createCommunities);
-enrutador.route("/getCommunities").get(communities.getCommunities);
+/*enrutador
+    .route('/communities/')
+    .put(communities.updateComunnities);*/
+
+//enrutador.route('/createCommunities').post(communities.createCommunities);
+//enrutador.route("/getCommunities").get(communities.getCommunities);
 
 module.exports = enrutador;
