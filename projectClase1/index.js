@@ -2,8 +2,19 @@
 const express = require("express");
 const morgan = require("morgan");
 const enrutador = require("./routes/routes");
+const db = require('./models/index');
 
 const app = express();
+
+db.sequelize.sync();
+
+//Para elumunar las tablas o vaciar y aplicar nuevos cambios
+/*
+db.sequelize.sync({ force: true }). then (() => {
+
+    console.log("Tablas restablecidas");
+
+});*/
 
 //el servidor js se divide en 
 // middleware -> routes -> statics files -> start server
