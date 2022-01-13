@@ -172,6 +172,7 @@ COPY public.addresses (id, country, state, city, "statusDelete", "createdAt", "u
 --
 
 COPY public.communities (id, name, type, "statusDelete", "createdAt", "updatedAt") FROM stdin;
+1	HackAdemy	Asociacion	f	2022-01-13 05:31:37.552+00	2022-01-13 05:31:37.552+00
 \.
 
 
@@ -194,7 +195,7 @@ SELECT pg_catalog.setval('public.addresses_id_seq', 1, false);
 -- Name: communities_id_seq; Type: SEQUENCE SET; Schema: public; Owner: feudal
 --
 
-SELECT pg_catalog.setval('public.communities_id_seq', 1, false);
+SELECT pg_catalog.setval('public.communities_id_seq', 1, true);
 
 
 --
