@@ -41,7 +41,10 @@ exports.createCommunities = async (req, res) => {
 exports.getCommunities = async (req, res) => {
     try {
 
-        return res.status(200).send({ communities });
+        const find = await community.findAll();
+        return res.status(200).send(find);
+
+        //return res.status(200).send({ communities });
 
 
     } catch (error) {
@@ -54,11 +57,16 @@ exports.updateComunnities = async (req, res) => {
     try {
 
         const { body, params } = req;
-        const update = communities.find(id);
+        //body lo que vamos a editar, params de quein vamos a editar
 
-        const data = {
-            name: body
-        }
+        const validate = await community.findOne({
+            where: {
+                id: params.id
+            }
+        });
+
+
+        if(!validate) return res.status(404).send({message: "no se encontro la comunidad"});
 
 
     } catch (error) {
