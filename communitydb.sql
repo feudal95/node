@@ -172,7 +172,9 @@ COPY public.addresses (id, country, state, city, "statusDelete", "createdAt", "u
 --
 
 COPY public.communities (id, name, type, "statusDelete", "createdAt", "updatedAt") FROM stdin;
-1	HackAdemy	Asociacion	f	2022-01-13 05:31:37.552+00	2022-01-13 05:31:37.552+00
+1	HackAdemy	Asociacion	f	2022-01-12 23:31:37.552-06	2022-01-12 23:31:37.552-06
+2	chocolate	abuelita	f	2022-01-14 17:05:33.199-06	2022-01-14 17:29:24.578-06
+3	spaceApp	HackAton	t	2022-01-14 17:55:39.372-06	2022-01-14 18:01:26.735-06
 \.
 
 
@@ -195,7 +197,7 @@ SELECT pg_catalog.setval('public.addresses_id_seq', 1, false);
 -- Name: communities_id_seq; Type: SEQUENCE SET; Schema: public; Owner: feudal
 --
 
-SELECT pg_catalog.setval('public.communities_id_seq', 1, true);
+SELECT pg_catalog.setval('public.communities_id_seq', 3, true);
 
 
 --

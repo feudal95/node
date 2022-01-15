@@ -9,9 +9,11 @@ enrutador
     .get(communities.getCommunities)
     .post(communities.createCommunities);
 
-/*enrutador
-    .route('/communities/')
-    .put(communities.updateComunnities);*/
+enrutador
+    .route('/communities/:id')
+    .put(communities.updateComunnities)
+    .delete(communities.deleteComunnities);
+
 
 //enrutador.route('/createCommunities').post(communities.createCommunities);
 //enrutador.route("/getCommunities").get(communities.getCommunities);

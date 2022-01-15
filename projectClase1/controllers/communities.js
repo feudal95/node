@@ -57,7 +57,15 @@ exports.updateComunnities = async (req, res) => {
     try {
 
         const { body, params } = req;
-        //body lo que vamos a editar, params de quein vamos a editar
+        //body lo que vamos a editar, params de que vamos a editar
+        if (!body)
+            return res.status(40).send({ message: "Los datos son requeridos" })
+
+        if (!body.name)
+            return res.status(404).send({ message: 'name is required...' });
+        if (!body.type)
+            return res.status(404).send({ message: 'type is required...' });
+
 
         const validate = await community.findOne({
             where: {
@@ -66,10 +74,38 @@ exports.updateComunnities = async (req, res) => {
         });
 
 
-        if(!validate) return res.status(404).send({message: "no se encontro la comunidad"});
+        if (!validate) return res.status(404).send({ message: "no se encontro la comunidad" });
+        if (validate.statusDelete === true) return res.status(404).send({ message: 'no se encontro la comunidad' });
 
+
+        validate.name = body.name;
+        validate.type = body.type;
+        validate.save();
+
+        return res.status(200).send({ message: "Comunidad se actualizo correctamente" });
 
     } catch (error) {
-
+        return res.status(500);
     }
 };
+
+
+exports.deleteComunnities = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const find = await community.findByPk(id);
+
+        if (!find)
+            return res.status(404).send({ message: "no se encontro la comunidad" });
+        if (find.statusDelete === true)
+            return res.status(404).send({ message: 'no se encontro la comunidad' });
+
+        find.statusDelete=true;
+        find.save();
+
+        return res.status(200).send({ message: "Comunidad se borro correctamente" });
+    } catch (error) {
+        return res.status(500);
+    }
+}
