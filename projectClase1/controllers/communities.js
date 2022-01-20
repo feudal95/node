@@ -1,8 +1,14 @@
 //let communities = [];
 
 const db = require('../models/index');
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
+
+const fileUploadImages = require("../utils/uploadImages");
+
 
 const community = db.community; // este es el modelo
+const address = db.address;
 
 
 exports.createCommunities = async (req, res) => {
@@ -24,15 +30,41 @@ exports.createCommunities = async (req, res) => {
             return res.status(404).send({ message: 'name is required...' });
         if (!body.type)
             return res.status(404).send({ message: 'type is required...' });
-        const create = await community.create({
 
+        if (!body.addressId)
+            return res.status(404).send({ message: 'addressId is required...' });
+
+
+
+        const findAddress = await address.findOne({
+
+            where: {
+                id: body.addressId,
+                statusDelete: false
+            }
+
+        });
+
+        let logo = await fileUploadImages.fileUpload(body.logo, '/logos');
+        console.log("soy el logo: ")
+        console.log(logo)
+
+        if (!findAddress) return res.status(404).send({ message: "Address no encontrado" });
+
+        const create = await community.create({
+            email: body.email,
+            password: body.password,
             name: body.name,
             type: body.type,
+            addressId: body.addressId,
+            logo: logo,
 
 
         });
         return res.status(201).send({ message: 'Comunidad creada correctamente' });
     } catch (error) {
+
+        console.error(error);
         return res.status(500).send(error);
     };
 
@@ -41,13 +73,34 @@ exports.createCommunities = async (req, res) => {
 exports.getCommunities = async (req, res) => {
     try {
 
-        const find = await community.findAll();
+        const { stateName } = req.query;
+
+        if (stateName) {
+
+            const find = await community.findAll({
+                where: { statusDelete: false },
+                include: {
+                    model: address,
+                    where: {
+                        state: { [Op.iRegexp]: stateName }
+                    }
+                }
+            });
+            return res.status(200).send(find);
+        }
+
+        const find = await community.findAll({
+
+            where: { statusDelete: false },
+
+        });
         return res.status(200).send(find);
 
         //return res.status(200).send({ communities });
 
 
     } catch (error) {
+        console.error(error);
         return res.status(500);
     }
 
@@ -59,7 +112,7 @@ exports.updateComunnities = async (req, res) => {
         const { body, params } = req;
         //body lo que vamos a editar, params de que vamos a editar
         if (!body)
-            return res.status(40).send({ message: "Los datos son requeridos" })
+            return res.status(404).send({ message: "Los datos son requeridos" });
 
         if (!body.name)
             return res.status(404).send({ message: 'name is required...' });
@@ -101,7 +154,7 @@ exports.deleteComunnities = async (req, res) => {
         if (find.statusDelete === true)
             return res.status(404).send({ message: 'no se encontro la comunidad' });
 
-        find.statusDelete=true;
+        find.statusDelete = true;
         find.save();
 
         return res.status(200).send({ message: "Comunidad se borro correctamente" });

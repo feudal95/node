@@ -15,4 +15,7 @@ const sequelize = new Sequelize(DB.DBNAME, DB.USER, DB.PASSWORD, {
   db.address = require('./address')(sequelize, Sequelize);
   db.members = require('./members')(sequelize, Sequelize);
 
+  db.address.hasMany(db.community);
+  db.community.belongsTo(db.address);
+
   module.exports = db;

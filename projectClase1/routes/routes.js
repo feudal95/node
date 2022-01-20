@@ -3,8 +3,10 @@ const express = require("express");
 const enrutador = express.Router();// esta funcion lo que hace es enrutarlas rutas
 
 const communities = require("../controllers/communities.js");
+const address = require("../controllers/address.js");
+const members = require("../controllers/members");
 
-enrutador
+enrutador //rutas para comunidades
     .route("/communities")
     .get(communities.getCommunities)
     .post(communities.createCommunities);
@@ -15,6 +17,29 @@ enrutador
     .delete(communities.deleteComunnities);
 
 
+
+//rutas para address
+enrutador //rutas para comunidades
+    .route("/address")
+    .get(address.getAddresses)
+    .post(address.createAddresses);
+
+enrutador
+    .route('/address/:id')
+    .put(address.updateAddresses)
+    .delete(address.deleteAddresses);
+
+
+//rutas para members
+enrutador //rutas para comunidades
+    .route("/members")
+    .get(members.getMembers)
+    .post(members.createMembers);
+
+enrutador
+    .route('/members/:id')
+    .put(members.updateMembers)
+    .delete(members.deleteMembers);
 //enrutador.route('/createCommunities').post(communities.createCommunities);
 //enrutador.route("/getCommunities").get(communities.getCommunities);
 
