@@ -3,6 +3,7 @@
 const db = require('../models/index');
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
+const bcrypt = require('bcrypt');
 
 const fileUploadImages = require("../utils/uploadImages");
 
@@ -30,6 +31,10 @@ exports.createCommunities = async (req, res) => {
             return res.status(404).send({ message: 'name is required...' });
         if (!body.type)
             return res.status(404).send({ message: 'type is required...' });
+        if (!body.email)
+            return res.status(404).send({ message: 'email is required...' });
+        if (!body.password)
+            return res.status(404).send({ message: 'password is required...' });
 
         if (!body.addressId)
             return res.status(404).send({ message: 'addressId is required...' });
@@ -46,6 +51,11 @@ exports.createCommunities = async (req, res) => {
         });
 
         let logo = await fileUploadImages.fileUpload(body.logo, '/logos');
+
+        let encriptedPassword = bcrypt.hashSync(body.password, 10);
+
+        console.log("soy el password encriptado: ", encriptedPassword);
+
         console.log("soy el logo: ")
         console.log(logo)
 
@@ -53,7 +63,7 @@ exports.createCommunities = async (req, res) => {
 
         const create = await community.create({
             email: body.email,
-            password: body.password,
+            password: encriptedPassword,
             name: body.name,
             type: body.type,
             addressId: body.addressId,

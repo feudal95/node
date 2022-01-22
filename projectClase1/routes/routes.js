@@ -5,10 +5,12 @@ const enrutador = express.Router();// esta funcion lo que hace es enrutarlas rut
 const communities = require("../controllers/communities.js");
 const address = require("../controllers/address.js");
 const members = require("../controllers/members");
+const generalities = require("../controllers/generalities");
+const { verifyToken, verifyRole } = require("../middleware/authorization")
 
 enrutador //rutas para comunidades
     .route("/communities")
-    .get(communities.getCommunities)
+    .get(verifyToken, communities.getCommunities)
     .post(communities.createCommunities);
 
 enrutador
@@ -21,7 +23,7 @@ enrutador
 //rutas para address
 enrutador //rutas para comunidades
     .route("/address")
-    .get(address.getAddresses)
+    .get(verifyToken, address.getAddresses)
     .post(address.createAddresses);
 
 enrutador
@@ -40,6 +42,9 @@ enrutador
     .route('/members/:id')
     .put(members.updateMembers)
     .delete(members.deleteMembers);
+
+enrutador
+    .route('/login').post(generalities.login);
 //enrutador.route('/createCommunities').post(communities.createCommunities);
 //enrutador.route("/getCommunities").get(communities.getCommunities);
 
